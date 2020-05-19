@@ -5,8 +5,8 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  os = "bento/ubuntu-18.04"
-  net_ip = "192.168.50"
+  os = "centos/7"
+  net_ip = "192.168.33"
 
   config.vm.define :master, primary: true do |master_config|
     master_config.vm.provider "virtualbox" do |vb|
@@ -14,10 +14,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vb.cpus = 1
         vb.name = "master"
     end
-    
+
     master_config.vm.box = "#{os}"
     master_config.vm.host_name = 'saltmaster.local'
-    master_config.vm.network "private_network", ip: "#{net_ip}.10"
+    master_config.vm.network "private_network", ip: "#{net_ip}.20"
     master_config.vm.synced_folder "saltstack/salt/", "/srv/salt"
     master_config.vm.synced_folder "saltstack/pillar/", "/srv/pillar"
 
@@ -43,8 +43,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 
   [
-    ["minion1",    "#{net_ip}.11",    "1024",    os ],
-    ["minion2",    "#{net_ip}.12",    "1024",    os ],
+    ["minion1",    "#{net_ip}.21",    "1024",    os ],
+    ["minion2",    "#{net_ip}.22",    "1024",    os ],
   ].each do |vmname,ip,mem,os|
     config.vm.define "#{vmname}" do |minion_config|
       minion_config.vm.provider "virtualbox" do |vb|

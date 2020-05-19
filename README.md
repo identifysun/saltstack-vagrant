@@ -1,9 +1,8 @@
 =================
-Salt Vagrant Demo
+SaltStack Vagrant
 =================
 
 A Salt Demo using Vagrant.
-
 
 Instructions
 ============
@@ -13,8 +12,8 @@ already be installed.
 
 .. code-block:: bash
 
-    git clone https://github.com/UtahDave/salt-vagrant-demo.git
-    cd salt-vagrant-demo
+    git clone git@github.com:identifysun/saltstack-vagrant.git
+    cd saltstack-vagrant
     vagrant plugin install vagrant-vbguest
     vagrant up
 
