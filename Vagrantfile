@@ -5,7 +5,7 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  os = "centos/7"
+  os = "bento/ubuntu-18.04"
   net_ip = "192.168.33"
 
   config.vm.define :master, primary: true do |master_config|
@@ -13,6 +13,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vb.memory = "2048"
         vb.cpus = 1
         vb.name = "master"
+        vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+        vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
     end
 
     master_config.vm.box = "#{os}"
@@ -23,14 +25,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     master_config.vm.provision :salt do |salt|
       salt.master_config = "saltstack/etc/master"
-      salt.master_key = "saltstack/keys/master_minion.pem"
-      salt.master_pub = "saltstack/keys/master_minion.pub"
-      salt.minion_key = "saltstack/keys/master_minion.pem"
-      salt.minion_pub = "saltstack/keys/master_minion.pub"
-      salt.seed_master = {
-                          "minion1" => "saltstack/keys/minion1.pub",
-                          "minion2" => "saltstack/keys/minion2.pub"
-                         }
+      salt.master_key    = "saltstack/keys/master_minion.pem"
+      salt.master_pub    = "saltstack/keys/master_minion.pub"
+      salt.minion_key    = "saltstack/keys/master_minion.pem"
+      salt.minion_pub    = "saltstack/keys/master_minion.pub"
+      salt.seed_master   = {
+        "minion1" => "saltstack/keys/minion1.pub",
+        "minion2" => "saltstack/keys/minion2.pub"
+      }
 
       salt.install_type = "stable"
       salt.install_master = true
@@ -51,6 +53,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           vb.memory = "#{mem}"
           vb.cpus = 1
           vb.name = "#{vmname}"
+          vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+          vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
       end
 
       minion_config.vm.box = "#{os}"
